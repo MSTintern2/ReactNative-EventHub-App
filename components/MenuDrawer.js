@@ -19,27 +19,27 @@ const MenuDrawer = () => {
     const [onApplyFilter, setonApplyFilter] = useState(false);
     const [filteredEvents, setFilteredEvents] = useState("");
     const applyFilter = async () => {
-        setonApplyFilter(true)
-        console.log(selectedCategories)
-        currentDate = getCurrentDate()
-        let tempAllEventsData = [];
-        // await firestore().collection('events').where("eventDate", "==", currentDate).get()
-        await firestore().collection('events').where("eventCategory", "in", selectedCategories).get()
-            .then(
-                res => {
-                    if (res.docs != []) {
-                        res.docs.map(item => {
-                            tempAllEventsData.push(item.data())
-                        })
-                        setFilteredEvents(tempAllEventsData);
-                    }
-                    console.log(filterEvents)
-                });
-        setShow(false)
-        setShowSportEvents(false)
-        setShowMusicEvents(false)
-        setShowFoodEvents(false)
-        setShowArtEvents(false)
+        // setonApplyFilter(true)
+        // console.log(selectedCategories)
+        // currentDate = getCurrentDate()
+        // let tempAllEventsData = [];
+        // // await firestore().collection('events').where("eventDate", "==", currentDate).get()
+        // await firestore().collection('events').where("eventCategory", "in", selectedCategories).get()
+        //     .then(
+        //         res => {
+        //             if (res.docs != []) {
+        //                 res.docs.map(item => {
+        //                     tempAllEventsData.push(item.data())
+        //                 })
+        //                 setFilteredEvents(tempAllEventsData);
+        //             }
+        //             console.log(filterEvents)
+        //         });
+        // setShow(false)
+        // setShowSportEvents(false)
+        // setShowMusicEvents(false)
+        // setShowFoodEvents(false)
+        // setShowArtEvents(false)
     }
     //reset filter
     const resetFilter = () => {
@@ -67,37 +67,50 @@ const MenuDrawer = () => {
     const [showTodayEvents, setShowTodayEvents] = useState(false);
     const [showTomorrowEvents, setShowTomorrowEvents] = useState(false);
     const [showWeekEvents, setShowWeekEvents] = useState(false);
-    const SportBtn = () => {
+    console.log(selectedCategories)
+    const SportBtn = async () => {
         setShowSportEvents(!showSportEvents)
-        setSelectedCategories((prevCategories) =>
-            prevCategories.includes("Sport")
-                ? prevCategories.filter((cat) => cat !== "Sport")
-                : [...prevCategories, "Sport"]
-        );
+        let tempAllEventsData = [];
+        await firestore().collection('events').where("eventCategory", "==", "Sport").get()
+            .then(
+                res => {
+                    if (res.docs != []) {
+                        res.docs.map(item => {
+                            tempAllEventsData.push(item.data())
+                        })
+                        setSelectedCategories(tempAllEventsData);
+                    }
+                }
+            )
+        // setSelectedCategories((prevCategories) =>
+        //     prevCategories.includes("Sport")
+        //         ? prevCategories.filter((cat) => cat !== "Sport")
+        //         : [...prevCategories, "Sport"]
+        // );
     }
     const MusicBtn = () => {
         setShowMusicEvents(!showMusicEvents)
-        setSelectedCategories((prevCategories) =>
-            prevCategories.includes("Music")
-                ? prevCategories.filter((cat) => cat !== "Music")
-                : [...prevCategories, "Music"]
-        );
+        // setSelectedCategories((prevCategories) =>
+        //     prevCategories.includes("Music")
+        //         ? prevCategories.filter((cat) => cat !== "Music")
+        //         : [...prevCategories, "Music"]
+        // );
     }
     const FoodBtn = () => {
         setShowFoodEvents(!showFoodEvents)
-        setSelectedCategories((prevCategories) =>
-            prevCategories.includes("Food")
-                ? prevCategories.filter((cat) => cat !== "Food")
-                : [...prevCategories, "Food"]
-        );
+        // setSelectedCategories((prevCategories) =>
+        //     prevCategories.includes("Food")
+        //         ? prevCategories.filter((cat) => cat !== "Food")
+        //         : [...prevCategories, "Food"]
+        // );
     }
     const ArtBtn = () => {
         setShowArtEvents(!showArtEvents)
-        setSelectedCategories((prevCategories) =>
-            prevCategories.includes("Art")
-                ? prevCategories.filter((cat) => cat !== "Art")
-                : [...prevCategories, "Art"]
-        );
+        // setSelectedCategories((prevCategories) =>
+        //     prevCategories.includes("Art")
+        //         ? prevCategories.filter((cat) => cat !== "Art")
+        //         : [...prevCategories, "Art"]
+        // );
     }
     const TodayBtn = () => {
         setShowTodayEvents(!showTodayEvents)
@@ -525,10 +538,10 @@ const MenuDrawer = () => {
                                             </View>
                                         </View>
                                         <FlatList
+                                            data={filteredEvents}
                                             horizontal={true}
                                             keyExtractor={item => item.eventId}
                                             showsHorizontalScrollIndicator={false}
-                                            data={filteredEvents}
                                             renderItem={({ item, index }) =>
                                                 <TouchableOpacity
                                                     onPress={() => navigation.navigate("EventDetails", { item: item })}
@@ -572,7 +585,6 @@ const MenuDrawer = () => {
                                         />
                                     </View>
                                     : null
-
                             }
                         </View>
                         : null
