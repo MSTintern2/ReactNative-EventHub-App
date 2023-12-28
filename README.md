@@ -82,4 +82,10 @@ To learn more about React Native, take a look at the following resources:
 
 These are the npm packages that are userd in this app.
 
-- react-native-switch [React Native Switch](https://www.npmjs.com/package/react-native-switch).
+- [React Native Switch](https://www.npmjs.com/package/react-native-switch) - learn more about React Native Switch.
+- [React Native Async Storage](https://www.npmjs.com/package/@react-native-async-storage/async-storage) - learn more about React Native Async Storage.
+- [React Native Multi Slider](https://www.npmjs.com/package/@react-native-async-storage/async-storage) - learn more about React Native Multi Slider.
+- [React Native Bottom Sheet](https://www.npmjs.com/package/@gorhom/bottom-sheet) - learn more about React Native Bottom Sheet.
+- [React Native DateTimePicker](https://www.npmjs.com/package/@react-native-community/datetimepicker) - learn more about React Native DateTimePicker.
+- [React Native Firebase App](https://www.npmjs.com/package/@react-native-firebase/app) - learn more about React Native Firebase App.
+- [React Native Firebase App](https://www.npmjs.com/package/@react-native-firebase/app) - learn more about React Native Firebase App.
