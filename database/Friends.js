@@ -1,0 +1,123 @@
+const Friends = [
+    {
+        id: 1,
+        name: 'Alex Lee',
+        profileImage: require("../Assets/FriendsImages/f1.png"),
+        followers: '246',
+    },
+    {
+        id: 2,
+        name: 'Micheal Ulasi',
+        profileImage: require("../Assets/FriendsImages/f2.png"),
+        followers: '106',
+    },
+    {
+        id: 3,
+        name: 'Cristofer',
+        profileImage: require("../Assets/FriendsImages/f3.png"),
+        followers: '506',
+    },
+    {
+        id: 4,
+        name: 'David  Silbia',
+        profileImage: require("../Assets/FriendsImages/f4.png"),
+        followers: '106',
+    },
+    {
+        id: 5,
+        name: 'Ashfak Sayem',
+        profileImage: require("../Assets/FriendsImages/f5.png"),
+        followers: '720',
+    },
+    {
+        id: 6,
+        name: 'Rocks Velkeinjen ',
+        profileImage: require("../Assets/FriendsImages/f6.png"),
+        followers: '440',
+    },
+    {
+        id: 7,
+        name: 'Roman Kutepov',
+        profileImage: require("../Assets/FriendsImages/f7.png"),
+        followers: '100',
+    },
+    {
+        id: 8,
+        name: 'Cristofer Nolan ',
+        profileImage: require("../Assets/FriendsImages/f8.png"),
+        followers: '200',
+    },
+    {
+        id: 9,
+        name: 'Jhon Wick',
+        profileImage: require("../Assets/FriendsImages/f9.png"),
+        followers: '350',
+    },
+    {
+        id: 10,
+        name: 'Zenifero Bolex',
+        profileImage: require("../Assets/FriendsImages/f10.png"),
+        followers: '158',
+    },
+    {
+        id: 11,
+        name: 'Alex Lee',
+        profileImage: require("../Assets/FriendsImages/f1.png"),
+        followers: '246',
+    },
+    {
+        id: 12,
+        name: 'Micheal Ulasi',
+        profileImage: require("../Assets/FriendsImages/f2.png"),
+        followers: '106',
+    },
+    {
+        id: 13,
+        name: 'Cristofer',
+        profileImage: require("../Assets/FriendsImages/f3.png"),
+        followers: '506',
+    },
+    {
+        id: 14,
+        name: 'David  Silbia',
+        profileImage: require("../Assets/FriendsImages/f4.png"),
+        followers: '106',
+    },
+    {
+        id: 15,
+        name: 'Ashfak Sayem',
+        profileImage: require("../Assets/FriendsImages/f5.png"),
+        followers: '720',
+    },
+    {
+        id: 16,
+        name: 'Rocks Velkeinjen ',
+        profileImage: require("../Assets/FriendsImages/f6.png"),
+        followers: '440',
+    },
+    {
+        id: 17,
+        name: 'Roman Kutepov',
+        profileImage: require("../Assets/FriendsImages/f7.png"),
+        followers: '100',
+    },
+    {
+        id: 18,
+        name: 'Cristofer Nolan ',
+        profileImage: require("../Assets/FriendsImages/f8.png"),
+        followers: '200',
+    },
+    {
+        id: 19,
+        name: 'Jhon Wick',
+        profileImage: require("../Assets/FriendsImages/f9.png"),
+        followers: '350',
+    },
+    {
+        id: 20,
+        name: 'Zenifero Bolex',
+        profileImage: require("../Assets/FriendsImages/f10.png"),
+        followers: '158',
+    },
+]
+export default Friends
