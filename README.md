@@ -82,4 +82,4 @@ To learn more about React Native, take a look at the following resources:
 
 These are the npm packages that are userd in this app.
 
-- react-native-switch [React Native Switch]([https://reactnative.dev/docs/getting-started](https://www.npmjs.com/package/react-native-switch)https://www.npmjs.com/package/react-native-switch).
+- react-native-switch [React Native Switch](https://www.npmjs.com/package/react-native-switch).
