@@ -96,4 +96,29 @@ These are the npm packages that are userd in this app.
 - [Lodash.Filter](https://www.npmjs.com/package/lodash.filter) - learn more about Lodash.Filter.
 - [React Native Accessible Slider](https://www.npmjs.com/package/react-native-a11y-slider) - learn more about React Native Accessible Slider.
 - [React Native Action Button](https://www.npmjs.com/package/react-native-action-button) - learn more about React Native Action Button.
-- [React Native Action Button](https://www.npmjs.com/package/react-native-action-button) - learn more about React Native Action Button.
+- [React Native Calendars](https://www.npmjs.com/package/react-native-calendars) - learn more about React Native Calendars.
+- [React Native Email Link](https://www.npmjs.com/package/react-native-email-link) - learn more about React Native Email Link.
+- [React Native Floating Action](https://www.npmjs.com/package/react-native-floating-action) - learn more about React Native Floating Action.
+- [React Native Geocoding](https://www.npmjs.com/package/react-native-geocoding) - learn more about React Native Geocoding.
+- [React Native Geolocation Service](https://www.npmjs.com/package/react-native-geolocation-service) - learn more about React Native Geolocation Service.
+- [React Native Gesture Handler](https://www.npmjs.com/package/react-native-gesture-handler) - learn more about React Native Gesture Handler.
+- [React Native Gifted Chat](https://www.npmjs.com/package/react-native-gifted-chat) - learn more about React Native Gifted Chat.
+- [React Native Image Picker](https://www.npmjs.com/package/react-native-image-picker) - learn more about React Native Image Picker.
+- [React Native Maps](https://www.npmjs.com/package/react-native-maps) - learn more about React Native Maps.
+- [React Native Modal Date&Time Picker](https://www.npmjs.com/package/react-native-modal-datetime-picker) - learn more about React Native Modal Date&Time Picker.
+- [React Native Onboarding Swiper](https://www.npmjs.com/package/react-native-onboarding-swiper) - learn more about React Native Onboarding Swiper.
+- [React Native One Signal](https://www.npmjs.com/package/react-native-onesignal) - learn more about React Native One Signal.
+- [React Native Pager View](https://www.npmjs.com/package/react-native-pager-view) - learn more about React Native Pager View.
+- [React Native Phone Call](https://www.npmjs.com/package/react-native-phone-call) - learn more about React Native Phone Call.
+- [React Native Reanimated](https://www.npmjs.com/package/react-native-reanimated) - learn more about React Native Reanimated.
+- [React Native Safearea Context](https://www.npmjs.com/package/react-native-safe-area-context) - learn more about React Native Safearea Context.
+- [React Native Screens](https://www.npmjs.com/package/react-native-screens) - learn more about React Native Screens.
+- [React Native Share](https://www.npmjs.com/package/react-native-share) - learn more about React Native Share.
+- [React Native Splash Screen](https://www.npmjs.com/package/react-native-splash-screen) - learn more about React Native Splash Screen.
+- [React Native Switch](https://www.npmjs.com/package/react-native-switch) - learn more about React Native Switch.
+- [React Native Tab View](https://www.npmjs.com/package/react-native-tab-view) - learn more about React Native Tab View.
+- [React Native UUID](https://www.npmjs.com/package/react-native-uuid) - learn more about React Native UUID.
+- [React Native Vector Icons](https://www.npmjs.com/package/react-native-vector-icons) - learn more about React Native Vector Icons.
+- [React Native View Shot](https://www.npmjs.com/package/react-native-view-shot) - learn more about React Native View Shot.
+- [React Native Range Slider](https://www.npmjs.com/package/rn-range-slider) - learn more about React Native Range Slider.
+- [Yup](https://www.npmjs.com/package/yup) - learn more about Yup.
