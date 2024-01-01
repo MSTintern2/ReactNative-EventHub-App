@@ -6,6 +6,7 @@ import { useNavigation, useIsFocused } from '@react-navigation/native';
 import usersInfo from '../database/UserInfo';
 import Filter from './Filter';
 import firestore from '@react-native-firebase/firestore';
+// import { collection, getDocs, where, orderBy, limit } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
@@ -16,31 +17,97 @@ import CustomMarker from '../database/CustomMarker';
 const MenuDrawer = () => {
     let currentDate;
     //apply filter
+    const [events, setEvents] = useState([]);
+    console.log("filtered events --- " + events)
+    // useEffect(() => {
+    const applyFilter = async () => {
+        console.log(selectedCategories.length)
+        let query = firestore().collection('events');
+        if (selectedCategories.length === 1) {
+            switch (selectedCategories[0]) {
+                case 'Sport':
+                    query = query.where('eventCategory', '==', 'Sport');
+                    break;
+                case 'Music':
+                    query = query.where('eventCategory', '==', 'Music');
+                    break;
+                case 'Art':
+                    query = query.where('eventCategory', '==', 'Art');
+                    break;
+                case 'Food':
+                    query = query.where('eventCategory', '==', 'Food');
+                    break;
+                default:
+                // console.log("in default")
+            }
+        } else if (selectedCategories.length === 2) {
+            switch (selectedCategories[0]) {
+                case 'Sport', 'Music':
+                    query = query.where('eventCategory', 'in', ['Sport', 'Music']);
+                    break;
+                case 'Sport', 'Food':
+                    query = query.where('eventCategory', 'in', ['Sport', 'Food']);
+                    break;
+                case 'Sport', 'Art':
+                    query = query.where('eventCategory', 'in', ['Sport', 'Art']);
+                    break;
+                case 'Music', 'Food':
+                    query = query.where('eventCategory', 'in', ['Music', 'Food']);
+                    break;
+                case 'Music', 'Art':
+                    query = query.where('eventCategory', 'in', ['Music', 'Art']);
+                    break;
+                case 'Art', 'Food':
+                    query = query.where('eventCategory', 'in', ['Art', 'Food']);
+                    break;
+                default:
+                // console.log("in default")
+            }
+        } else if (selectedCategories.length === 3) {
+            switch (selectedCategories[0]) {
+                case 'Sport', 'Music', 'Art':
+                    query = query.where('eventCategory', 'in', ['Sport', 'Music', 'Art']);
+                    break;
+                case 'Sport', 'Music', 'Food':
+                    query = query.where('eventCategory', 'in', ['Sport', 'Music', 'Food']);
+                    break;
+                case 'Sport', 'Food', 'Art':
+                    query = query.where('eventCategory', 'in', ['Sport', 'Food', 'Art']);
+                    break;
+                case 'Music', 'Art', 'Food':
+                    query = query.where('eventCategory', 'in', ['Music', 'Art', 'Food']);
+                    break;
+                default:
+                // console.log("in default")
+            }
+        } else if (selectedCategories.length === 4) {
+            query = query.where('eventCategory', 'in', ['Sport', 'Food', 'Art', 'Music']);
+        }
+        // let selectedDate = '29-12-2023'
+        // if (selectedDate) {
+        //     query = query.where('eventDate', '==', selectedDate);
+        // }
+
+        // if (selectedPriceRange) {
+        //     const [minPrice, maxPrice] = selectedPriceRange.split('-');
+        //     query = query.where('eventTicketPrice', '>=', minPrice).where('eventTicketPrice', '<=', maxPrice);
+        // }
+
+        const snapshot = await query.get();
+        setEvents(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        setonApplyFilter(true)
+        setShow(false)
+        setSelectedCategories([])
+    };
+
+    // fetchEvents();
+    // }, [selectedCategories]);
     const [onApplyFilter, setonApplyFilter] = useState(false);
     const [filteredEvents, setFilteredEvents] = useState("");
-    const applyFilter = async () => {
-        // setonApplyFilter(true)
-        // console.log(selectedCategories)
-        // currentDate = getCurrentDate()
-        // let tempAllEventsData = [];
-        // // await firestore().collection('events').where("eventDate", "==", currentDate).get()
-        // await firestore().collection('events').where("eventCategory", "in", selectedCategories).get()
-        //     .then(
-        //         res => {
-        //             if (res.docs != []) {
-        //                 res.docs.map(item => {
-        //                     tempAllEventsData.push(item.data())
-        //                 })
-        //                 setFilteredEvents(tempAllEventsData);
-        //             }
-        //             console.log(filterEvents)
-        //         });
-        // setShow(false)
-        // setShowSportEvents(false)
-        // setShowMusicEvents(false)
-        // setShowFoodEvents(false)
-        // setShowArtEvents(false)
-    }
+    // const applyFilter = async () => {
+    //     setSelectedCategories([])
+    //     setonApplyFilter(false)
+    // }
     //reset filter
     const resetFilter = () => {
         setShow(false)
@@ -54,6 +121,7 @@ const MenuDrawer = () => {
     const closeFilter = () => {
         setonApplyFilter(false)
         setSelectedCategories([])
+        setEvents([])
     }
     //price filter slider
     const [multiSliderValue, setMultiSliderValue] = useState([0, 300]);
@@ -70,57 +138,41 @@ const MenuDrawer = () => {
     console.log(selectedCategories)
     const SportBtn = async () => {
         setShowSportEvents(!showSportEvents)
-        let tempAllEventsData = [];
-        await firestore().collection('events').where("eventCategory", "==", "Sport").get()
-            .then(
-                res => {
-                    if (res.docs != []) {
-                        res.docs.map(item => {
-                            tempAllEventsData.push(item.data())
-                        })
-                        setSelectedCategories(tempAllEventsData);
-                    }
-                }
-            )
-        // setSelectedCategories((prevCategories) =>
-        //     prevCategories.includes("Sport")
-        //         ? prevCategories.filter((cat) => cat !== "Sport")
-        //         : [...prevCategories, "Sport"]
-        // );
+        setSelectedCategories((prevCategories) =>
+            prevCategories.includes("Sport")
+                ? prevCategories.filter((cat) => cat !== "Sport")
+                : [...prevCategories, "Sport"])
     }
-    const MusicBtn = () => {
+    const MusicBtn = async () => {
         setShowMusicEvents(!showMusicEvents)
-        // setSelectedCategories((prevCategories) =>
-        //     prevCategories.includes("Music")
-        //         ? prevCategories.filter((cat) => cat !== "Music")
-        //         : [...prevCategories, "Music"]
-        // );
+        setSelectedCategories((prevCategories) =>
+            prevCategories.includes("Music")
+                ? prevCategories.filter((cat) => cat !== "Music")
+                : [...prevCategories, "Music"])
     }
     const FoodBtn = () => {
         setShowFoodEvents(!showFoodEvents)
-        // setSelectedCategories((prevCategories) =>
-        //     prevCategories.includes("Food")
-        //         ? prevCategories.filter((cat) => cat !== "Food")
-        //         : [...prevCategories, "Food"]
-        // );
+        setSelectedCategories((prevCategories) =>
+            prevCategories.includes("Food")
+                ? prevCategories.filter((cat) => cat !== "Food")
+                : [...prevCategories, "Food"])
     }
     const ArtBtn = () => {
         setShowArtEvents(!showArtEvents)
-        // setSelectedCategories((prevCategories) =>
-        //     prevCategories.includes("Art")
-        //         ? prevCategories.filter((cat) => cat !== "Art")
-        //         : [...prevCategories, "Art"]
-        // );
+        setSelectedCategories((prevCategories) =>
+            prevCategories.includes("Art")
+                ? prevCategories.filter((cat) => cat !== "Art")
+                : [...prevCategories, "Art"])
     }
-    const TodayBtn = () => {
-        setShowTodayEvents(!showTodayEvents)
-    }
-    const TomorrowBtn = () => {
-        setShowTomorrowEvents(!showTomorrowEvents)
-    }
-    const WeekBtn = () => {
-        setShowWeekEvents(!showWeekEvents)
-    }
+    // const TodayBtn = () => {
+    //     setShowTodayEvents(!showTodayEvents)
+    // }
+    // const TomorrowBtn = () => {
+    //     setShowTomorrowEvents(!showTomorrowEvents)
+    // }
+    // const WeekBtn = () => {
+    //     setShowWeekEvents(!showWeekEvents)
+    // }
     // console.log(multiSliderValue)
     // get currnet date
     const getCurrentDate = () => {
@@ -335,7 +387,8 @@ const MenuDrawer = () => {
                                 <Text style={styles.menuText}>Contact Us</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.menu}>
+                        <TouchableOpacity style={styles.menu}
+                        onPress={() => navigation.navigate("Setting")}>
                             <View style={styles.menuInside}>
                                 <Image
                                     source={require("../Assets/Icons/Settings.png")}
@@ -523,7 +576,7 @@ const MenuDrawer = () => {
                     onApplyFilter ?
                         <View>
                             {
-                                filteredEvents != '' ?
+                                events != '' ?
                                     <View>
                                         <View style={{ marginHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                             <Text style={{ color: '#fff', fontSize: 20, fontWeight: '400', marginLeft: 10, fontFamily: 'AirbnbCereal_M' }}>Filtered Data</Text>
@@ -538,7 +591,7 @@ const MenuDrawer = () => {
                                             </View>
                                         </View>
                                         <FlatList
-                                            data={filteredEvents}
+                                            data={events}
                                             horizontal={true}
                                             keyExtractor={item => item.eventId}
                                             showsHorizontalScrollIndicator={false}

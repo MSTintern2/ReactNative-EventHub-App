@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import upcomingEventsInfo from '../database/UpcomingEventsInfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import firestore, { firebase } from '@react-native-firebase/firestore';
-
+import { Timestamp } from 'firebase/firestore';
 
 const EventCards = (props) => {
     const navigation = useNavigation();
@@ -106,7 +106,7 @@ const EventCards = (props) => {
             let tempAllEventsData = [];
             currentDate = getCurrentDate()
             // firestore().collection('events').get()
-            firestore().collection('events').where("eventDate", ">", currentDate).get()
+            firestore().collection('events').where("eventDate", "<", currentDate).get()
                 .then(
                     res => {
                         if (res.docs != []) {
@@ -132,51 +132,54 @@ const EventCards = (props) => {
         // console.log("get current date ----------------" + currentdate)
         return currentdate;
     }
-    
+
     return (
         <View>
             <View>
-                <FlatList
-                    horizontal={true}
-                    keyExtractor={item => item.eventId}
-                    showsHorizontalScrollIndicator={false}
-                    data={allEvents}
-                    renderItem={({ item, index }) =>
-                        <TouchableOpacity
-                            onPress={() => navigation.navigate("EventDetails", { item: item })}
-                            style={styles.eventCardContainer}
-                        >
-                            <Image
-                                style={{ width: 217, height: 140, resizeMode: 'cover', borderRadius: 10, }}
-                                source={{ uri: item.eventBanner }}
-                            />
-                            <View style={styles.eventDateContainer}>
-                                <View style={styles.dateContainer}>
-                                    <Text style={{ color: '#F0635A', fontSize: 18, fontWeight: '400', textTransform: 'uppercase', fontFamily: 'AirbnbCereal_M' }}>{item.eventDate.slice(0, 2)}</Text>
-                                    <Text style={{ color: '#F0635A', fontSize: 12, fontWeight: '400', textTransform: 'uppercase', fontFamily: 'AirbnbCereal_M' }}>{item.eventMonth}</Text>
-                                </View>
-                                {/* <TouchableOpacity style={[styles.bookmarkContainer, { backgroundColor: onPressBookmark ? '#5669FF' : 'rgba(255, 255, 255, 0.70)' }]}
+                {
+                    allEvents.length ?
+                        //events > 0
+                        <FlatList
+                            horizontal={true}
+                            keyExtractor={item => item.eventId}
+                            showsHorizontalScrollIndicator={false}
+                            data={allEvents}
+                            renderItem={({ item, index }) =>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate("EventDetails", { item: item })}
+                                    style={styles.eventCardContainer}
+                                >
+                                    <Image
+                                        style={{ width: 217, height: 140, resizeMode: 'cover', borderRadius: 10, }}
+                                        source={{ uri: item.eventBanner }}
+                                    />
+                                    <View style={styles.eventDateContainer}>
+                                        <View style={styles.dateContainer}>
+                                            <Text style={{ color: '#F0635A', fontSize: 18, fontWeight: '400', textTransform: 'uppercase', fontFamily: 'AirbnbCereal_M' }}>{item.eventDate.slice(0, 2)}</Text>
+                                            <Text style={{ color: '#F0635A', fontSize: 12, fontWeight: '400', textTransform: 'uppercase', fontFamily: 'AirbnbCereal_M' }}>{item.eventMonth}</Text>
+                                        </View>
+                                        {/* <TouchableOpacity style={[styles.bookmarkContainer, { backgroundColor: onPressBookmark ? '#5669FF' : 'rgba(255, 255, 255, 0.70)' }]}
                                     onPress={() => addBookmark(item, index)}>
                                     <Image
                                         style={{ tintColor: onPressBookmark ? "#fff" : "#F0635A" }}
                                         source={require("../Assets/Icons/EventBookmark.png")}
                                     />
                                 </TouchableOpacity> */}
-                            </View>
-                            <View>
-                                <View>
-                                    <View style={{ marginLeft: 7, marginRight: 17, marginTop: 10, }}>
-                                        <Text style={{ color: '#000', fontSize: 18, fontWeight: '400', fontFamily: 'AirbnbCereal_M' }} numberOfLines={1}>{item.eventName}</Text>
                                     </View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 7, marginTop: 8 }}>
-                                        <Image
-                                            style={{ marginRight: 5, height: 22, width: 22 }}
-                                            source={require("../Assets/Icons/EventDetailsCalendar.png")}
-                                        />
-                                        <Text style={{ color: '#5669FF', fontSize: 13, fontWeight: '400', textTransform: 'uppercase', fontFamily: 'AirbnbCereal_M' }}>
-                                            {item.eventDate} {item.eventStartingTime}
-                                        </Text>
-                                        {/* <View style={{ height: 24, flexDirection: 'row', width: 70 }}>
+                                    <View>
+                                        <View>
+                                            <View style={{ marginLeft: 7, marginRight: 17, marginTop: 10, }}>
+                                                <Text style={{ color: '#000', fontSize: 18, fontWeight: '400', fontFamily: 'AirbnbCereal_M' }} numberOfLines={1}>{item.eventName}</Text>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 7, marginTop: 8 }}>
+                                                <Image
+                                                    style={{ marginRight: 5, height: 22, width: 22 }}
+                                                    source={require("../Assets/Icons/EventDetailsCalendar.png")}
+                                                />
+                                                <Text style={{ color: '#5669FF', fontSize: 13, fontWeight: '400', textTransform: 'uppercase', fontFamily: 'AirbnbCereal_M' }}>
+                                                    {item.eventDate} {item.eventStartingTime}
+                                                </Text>
+                                                {/* <View style={{ height: 24, flexDirection: 'row', width: 70 }}>
                                             <View style={{ position: 'absolute', zIndex: 3, }}>
                                                 <Image style={{ width: 24, height: 24, borderRadius: 24, borderColor: '#fff', borderWidth: 1 }} source={item.going1} />
                                             </View>
@@ -187,22 +190,37 @@ const EventCards = (props) => {
                                                 <Image style={{ width: 24, height: 24, borderRadius: 24, borderColor: '#fff', borderWidth: 1 }} source={item.going3} />
                                             </View>
                                         </View> */}
-                                        {/* <View>
+                                                {/* <View>
                                             <Text style={{ color: '#3F38DD', fontSize: 12, fontWeight: '500', lineHeight: 19.23, fontFamily: 'AirbnbCereal_M' }}>{item.howManyGoing}</Text>
                                         </View> */}
+                                            </View>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 7, marginTop: 8, marginBottom: 8 }}>
+                                                <Image
+                                                    style={{ opacity: 0.4, marginRight: 5 }}
+                                                    source={require("../Assets/Icons/LocationTabBar.png")}
+                                                />
+                                                <Text style={{ color: '#2B2849', fontSize: 13, fontWeight: '400', fontFamily: 'AirbnbCereal_2' }}>{item.eventAddress}</Text>
+                                            </View>
+                                        </View>
                                     </View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 7, marginTop: 8, marginBottom: 8 }}>
-                                        <Image
-                                            style={{ opacity: 0.4, marginRight: 5 }}
-                                            source={require("../Assets/Icons/LocationTabBar.png")}
-                                        />
-                                        <Text style={{ color: '#2B2849', fontSize: 13, fontWeight: '400', fontFamily: 'AirbnbCereal_2' }}>{item.eventAddress}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    }
-                />
+                                </TouchableOpacity>
+                            }
+                        />
+                        :
+                        //events < 0
+                        <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10, marginHorizontal: 24 }}>
+                            <Image
+                                style={{ height: 75, width: 75, }}
+                                source={require("../Assets/Others/NoEvents.png")}
+                            />
+                            <Text style={{ marginTop: 10, color: '#120D26', fontSize: 24, fontWeight: '500', lineHeight: 34, textAlign: 'center', fontFamily: 'AirbnbCereal_M', }}>
+                                No Upcoming Events
+                            </Text>
+                            <Text style={{ marginTop: 7, color: '#747688', fontSize: 16, fontWeight: '400', lineHeight: 25, textAlign: 'center', opacity: 0.7, fontFamily: 'AirbnbCereal_2', marginBottom: 10, }}>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor
+                            </Text>
+                        </View>
+                }
             </View>
         </View>
     )
