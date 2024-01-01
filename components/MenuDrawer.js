@@ -13,14 +13,18 @@ import Geolocation from 'react-native-geolocation-service';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import CustomLabel from '../database/CustomLable';
 import CustomMarker from '../database/CustomMarker';
+import LoginLoader from './LoginLoader';
 
 const MenuDrawer = () => {
     let currentDate;
+    //activity loader
+    const [visible, setVisible] = useState(false);
     //apply filter
     const [events, setEvents] = useState([]);
     console.log("filtered events --- " + events)
     // useEffect(() => {
     const applyFilter = async () => {
+        setVisible(true)
         console.log(selectedCategories.length)
         let query = firestore().collection('events');
         if (selectedCategories.length === 1) {
@@ -98,6 +102,7 @@ const MenuDrawer = () => {
         setonApplyFilter(true)
         setShow(false)
         setSelectedCategories([])
+        setVisible(false)
     };
 
     // fetchEvents();
@@ -822,6 +827,8 @@ const MenuDrawer = () => {
                     {/* <Filter /> */}
                 </View>
             </Modal>
+            {/* activity loader */}
+            <LoginLoader visible={visible} />
         </SafeAreaView>
     )
 }
