@@ -6,6 +6,7 @@ import firestore from '@react-native-firebase/firestore';
 
 const Chat = ({ route }) => {
     const navigation = useNavigation();
+    const { pic } = route.params;
     const { name } = route.params;
     const { myId } = route.params;
     const { id } = route.params;
@@ -46,13 +47,13 @@ const Chat = ({ route }) => {
     }, [])
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff',}}>
+        <View style={{ flex: 1, backgroundColor: '#fff', }}>
             <StatusBar
                 backgroundColor="#4A43EC"
                 barStyle="light-content"
             />
             {/* Header */}
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingVertical: 16, backgroundColor: '#4A43EC',}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingVertical: 16, backgroundColor: '#4A43EC', }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 24, }}>
                     <TouchableOpacity
                         onPress={() => navigation.goBack()}>
@@ -61,11 +62,23 @@ const Chat = ({ route }) => {
                             source={require("../Assets/Icons/EventDetailsLeftArrow.png")}
                         />
                     </TouchableOpacity>
-                    <Text style={{ color: '#fff', fontSize: 24, fontWeight: '400',fontFamily: 'AirbnbCereal_M' }}>{name}</Text>
+                    {
+                        pic == "" ?
+                            <Image
+                                style={{ height: 45, width: 45, marginRight: 10, borderRadius: 30 }}
+                                source={require("../Assets/Others/UserFakePic.png")}
+                            />
+                            :
+                            <Image
+                                style={{ height: 45, width: 45, marginRight: 10, borderRadius: 30 }}
+                                source={{uri: pic}}
+                            />
+                    }
+                    <Text style={{ color: '#fff', fontSize: 24, fontWeight: '400', fontFamily: 'AirbnbCereal_M' }}>{name}</Text>
                 </View>
             </View>
             {/* Body */}
-            <View style={{ flex: 1,}}>
+            <View style={{ flex: 1, }}>
                 <GiftedChat
                     messages={messages}
                     onSend={messages => onSend(messages)}

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, FlatList, StatusBar, Modal, TextInput,Alert } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View, FlatList, StatusBar, Modal, TextInput, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
@@ -78,13 +78,14 @@ const Messages = () => {
     //     }
     // };
     //add press user in db
-    const addChatWithUserData = async (name, userId) => {
+    const addChatWithUserData = async (name, userId, profileImage) => {
         // console.log(name)
         // console.log(userId)
         // firestore().collection('users').doc('chat' + myId + userId).set({
-            firestore().collection('users').doc(myId).collection('chatwith').doc('chat' + myId + userId).set({
+        firestore().collection('users').doc(myId).collection('chatwith').doc('chat' + myId + userId).set({
             chatwithuserId: userId,
             chatwithusername: name,
+            chatwithuserimage: profileImage,
         }).then(
             res => {
                 setVisible(true)
@@ -110,7 +111,8 @@ const Messages = () => {
                 snapshot.forEach(doc => {
                     chatWithUser.push({
                         chatwithuserId: doc.data().chatwithuserId,
-                        chatwithusername: doc.data().chatwithusername
+                        chatwithusername: doc.data().chatwithusername,
+                        chatwithuserimage: doc.data().chatwithuserimage,
                     });
                 });
             }
@@ -185,7 +187,7 @@ const Messages = () => {
                                 source={require("../Assets/Icons/EventDetailsLeftArrow.png")}
                             />
                         </TouchableOpacity>
-                        <Text style={{ color: '#fff', fontSize: 24, fontWeight: '400', fontFamily: 'AirbnbCereal_M'}}>Messages</Text>
+                        <Text style={{ color: '#fff', fontSize: 24, fontWeight: '400', fontFamily: 'AirbnbCereal_M' }}>Messages</Text>
                     </View>
                     <TouchableOpacity
                         style={{ marginRight: 10, }}
@@ -209,13 +211,21 @@ const Messages = () => {
                         <View style={{ marginHorizontal: 24 }}>
                             <TouchableOpacity
                                 style={{ marginTop: 10, borderWidth: 1, borderColor: '#4A43EC', borderRadius: 12, paddingVertical: 6, paddingHorizontal: 6, elevation: 3, backgroundColor: '#fff' }}
-                                onPress={() => navigation.navigate("Chat", { myId: myId, name: item.chatwithusername, id: item.chatwithuserId })}>
+                                onPress={() => navigation.navigate("Chat", { myId: myId, name: item.chatwithusername, id: item.chatwithuserId, pic: item.chatwithuserimage })}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                {
+                                    item.chatwithuserimage == "" ? 
                                     <Image
-                                        style={{ height: 60, width: 60, marginRight: 20, }}
+                                        style={{ height: 60, width: 60, marginRight: 20, borderRadius: 30  }}
                                         source={require("../Assets/Others/UserFakePic.png")}
                                     />
-                                    <Text style={{ fontSize: 20, fontWeight: '500', color: '#4A43EC', flex: 1 ,fontFamily: 'AirbnbCereal_M'}}>
+                                    :
+                                    <Image
+                                        style={{ height: 60, width: 60, marginRight: 20, borderRadius: 30  }}
+                                        source={{uri: item.chatwithuserimage}}
+                                    />
+                                }
+                                    <Text style={{ fontSize: 20, fontWeight: '500', color: '#4A43EC', flex: 1, fontFamily: 'AirbnbCereal_M' }}>
                                         {item.chatwithusername}
                                         {/* {item.chatwithuserId} */}
                                     </Text>
@@ -238,7 +248,7 @@ const Messages = () => {
                                     source={require("../Assets/Icons/EventDetailsLeftArrow.png")}
                                 />
                             </TouchableOpacity>
-                            <Text style={{ color: '#fff', fontSize: 24, fontWeight: '400',fontFamily: 'AirbnbCereal_M' }}>Find Friend for Chat</Text>
+                            <Text style={{ color: '#fff', fontSize: 24, fontWeight: '400', fontFamily: 'AirbnbCereal_M' }}>Find Friend for Chat</Text>
                         </View>
                     </View>
                     {/* modal body */}
@@ -248,7 +258,7 @@ const Messages = () => {
                             <TextInput
                                 placeholder='Search...'
                                 placeholderTextColor='#747688'
-                                style={{ marginLeft: 10, fontSize: 16, fontWeight: '400',fontFamily: 'AirbnbCereal_2',color: '#747688', }}
+                                style={{ marginLeft: 10, fontSize: 16, fontWeight: '400', fontFamily: 'AirbnbCereal_2', color: '#747688', }}
                                 onChangeText={text => searchUser(text)}
                             />
                         </View>
@@ -262,15 +272,23 @@ const Messages = () => {
                                         <View style={{ marginHorizontal: 24 }}>
                                             <TouchableOpacity
                                                 style={{ marginTop: 10, borderWidth: 1, borderColor: '#4A43EC', borderRadius: 12, paddingVertical: 6, paddingHorizontal: 6, elevation: 3, backgroundColor: '#fff' }}
-                                                onPress={() => addChatWithUserData(item.name, item.userId)}
+                                                onPress={() => addChatWithUserData(item.name, item.userId, item.profileImage)}
                                             // onPress={() => addChatWithUserData(item)}
                                             >
                                                 <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                                    <Image
-                                                        style={{ height: 60, width: 60, marginRight: 20, }}
-                                                        source={require("../Assets/Others/UserFakePic.png")}
-                                                    />
-                                                    <Text style={{ fontSize: 20, fontWeight: '500', color: '#4A43EC',fontFamily: 'AirbnbCereal_M' }}>
+                                                    {
+                                                        item.profileImage == '' ?
+                                                            <Image
+                                                                style={{ height: 60, width: 60, marginRight: 20, borderRadius: 30 }}
+                                                                source={require("../Assets/Others/UserFakePic.png")}
+                                                            />
+                                                            :
+                                                            <Image
+                                                                style={{ height: 60, width: 60, marginRight: 20, borderRadius: 30 }}
+                                                                source={{ uri: item.profileImage }}
+                                                            />
+                                                    }
+                                                    <Text style={{ fontSize: 20, fontWeight: '500', color: '#4A43EC', fontFamily: 'AirbnbCereal_M' }}>
                                                         {item.name}
                                                     </Text>
                                                 </View>
@@ -285,15 +303,23 @@ const Messages = () => {
                                         <View style={{ marginHorizontal: 24 }}>
                                             <TouchableOpacity
                                                 style={{ marginTop: 10, borderWidth: 1, borderColor: '#4A43EC', borderRadius: 12, paddingVertical: 6, paddingHorizontal: 6, elevation: 3, backgroundColor: '#fff' }}
-                                                onPress={() => addChatWithUserData(item.name, item.userId)}
+                                                onPress={() => addChatWithUserData(item.name, item.userId, item.profileImage)}
                                             // onPress={() => addChatWithUserData(item)}
                                             >
                                                 <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                                    <Image
-                                                        style={{ height: 60, width: 60, marginRight: 20, }}
-                                                        source={require("../Assets/Others/UserFakePic.png")}
-                                                    />
-                                                    <Text style={{ fontSize: 20, fontWeight: '500', color: '#4A43EC',fontFamily: 'AirbnbCereal_M' }}>
+                                                    {
+                                                        item.profileImage == '' ?
+                                                            <Image
+                                                                style={{ height: 60, width: 60, marginRight: 20, borderRadius: 30 }}
+                                                                source={require("../Assets/Others/UserFakePic.png")}
+                                                            />
+                                                            :
+                                                            <Image
+                                                                style={{ height: 60, width: 60, marginRight: 20, borderRadius: 30 }}
+                                                                source={{ uri: item.profileImage }}
+                                                            />
+                                                    }
+                                                    <Text style={{ fontSize: 20, fontWeight: '500', color: '#4A43EC', fontFamily: 'AirbnbCereal_M' }}>
                                                         {item.name}
                                                     </Text>
                                                 </View>

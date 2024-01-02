@@ -221,8 +221,30 @@ const AddEvent = () => {
             console.log(error)
         }
     }
+    //validations
+    const [eventNameError, seteventNameError] = useState(false);
+    const [eventCenterError, seteventCenterError] = useState(false);
+    const [eventAddressError, seteventAddressError] = useState(false);
+    const [eventCategoryError, seteventCategoryError] = useState(false);
+    const [eventTicketPriceError, seteventTicketPriceError] = useState(false);
+    const [eventAboutError, seteventAboutError] = useState(false);
+    const [eventStartingTimeError, seteventStartingTimeError] = useState(false);
+    const [eventEndingTimeError, seteventEndingTimeError] = useState(false);
+    const [eventDateError, seteventDateError] = useState(false);
+    const [eventBannerError, seteventBannerError] = useState(false);
     // add event to firebase
     const addEvent = async () => {
+        { !eventName ? seteventNameError(true) : seteventNameError(false) }
+        { !eventCenter ? seteventCenterError(true) : seteventCenterError(false) }
+        { !eventAddress ? seteventAddressError(true) : seteventAddressError(false) }
+        { !eventTicketPrice ? seteventTicketPriceError(true) : seteventTicketPriceError(false) }
+        { !eventAbout ? seteventAboutError(true) : seteventAboutError(false) }
+        { !eventCategory ? seteventCategoryError(true) : seteventCategoryError(false) }
+        { !startingEventDate ? seteventDateError(true) : seteventDateError(false) }
+        { startingTime == "00:00:00" ? seteventStartingTimeError(true) : seteventStartingTimeError(false) }
+        { endingTime == "00:00:00" ? seteventEndingTimeError(true) : seteventEndingTimeError(false) }
+        { !eventBanner ? seteventBannerError(true) : seteventBannerError(false) }
+        if (!eventName || !eventCenter || !eventAddress || !eventTicketPrice || !eventAbout || !eventCategory || !startingEventDate || !startingTime || !endingTime || !eventBanner ) { return; }
         setVisible(true)
         const eventId = uuid.v4()
         firestore().collection('events').doc(eventId).set({
@@ -310,6 +332,7 @@ const AddEvent = () => {
                         style={{ fontSize: 15, paddingLeft: 14, fontFamily: 'AirbnbCereal_2', lineHeight: 23, flex: 1 }}
                     />
                 </View>
+                {eventNameError ? <Text style={styles.error}>Please enter event name.</Text> : null}
                 {/* starting time, ending time */}
                 <View style={{ marginTop: 10, flexDirection: 'row', gap: 10 }}>
                     <TouchableOpacity
@@ -333,6 +356,8 @@ const AddEvent = () => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                {eventStartingTimeError ? <Text style={styles.error}>Please select event stating time.</Text> : null}
+                {eventEndingTimeError ? <Text style={styles.error}>Please select event ending time.</Text> : null}
                 {/* date */}
                 <View style={{ marginTop: 10, flexDirection: 'row', gap: 10 }}>
                     <TouchableOpacity
@@ -348,6 +373,7 @@ const AddEvent = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {eventDateError ? <Text style={styles.error}>Please select event date.</Text> : null}
                 {
                     eventBanner != null ?
                         <Image
@@ -368,6 +394,7 @@ const AddEvent = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
+                {eventBannerError ? <Text style={styles.error}>Please select event banner.</Text> : null}
                 {/* category */}
                 <View style={{ flexDirection: 'row', gap: 10, }}>
                     <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', fontFamily: 'AirbnbCereal_M', marginTop: 10, }}>
@@ -407,6 +434,7 @@ const AddEvent = () => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                {eventCategoryError ? <Text style={styles.error}>Please select event category.</Text> : null}
                 {/* center */}
                 <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', fontFamily: 'AirbnbCereal_M', marginTop: 10, }}>
                     Event Center:
@@ -423,6 +451,7 @@ const AddEvent = () => {
                         style={{ fontSize: 15, paddingLeft: 14, fontFamily: 'AirbnbCereal_2', flex: 1 }}
                     />
                 </View>
+                {eventCenterError ? <Text style={styles.error}>Please enter event center.</Text> : null}
                 {/* address */}
                 <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', fontFamily: 'AirbnbCereal_M', marginTop: 10, }}>
                     Event Address:
@@ -439,6 +468,7 @@ const AddEvent = () => {
                         style={{ fontSize: 15, paddingLeft: 14, fontFamily: 'AirbnbCereal_2', flex: 1 }}
                     />
                 </View>
+                {eventAddressError ? <Text style={styles.error}>Please enter event address.</Text> : null}
                 {/* Ticket Price */}
                 <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', fontFamily: 'AirbnbCereal_M', marginTop: 10, }}>
                     Event Ticket Price:
@@ -455,6 +485,7 @@ const AddEvent = () => {
                         style={{ fontSize: 15, paddingLeft: 14, fontFamily: 'AirbnbCereal_2', flex: 1 }}
                     />
                 </View>
+                {eventTicketPriceError ? <Text style={styles.error}>Please enter event ticket price.</Text> : null}
                 {/* About */}
                 <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', fontFamily: 'AirbnbCereal_M', marginTop: 10, }}>
                     Event About:
@@ -468,9 +499,10 @@ const AddEvent = () => {
                         multiline={true}
                         value={eventAbout}
                         onChangeText={(text) => setEventAbout(text)}
-                        style={{ fontSize: 15, paddingLeft: 14, fontFamily: 'AirbnbCereal_2', flex: 1, marginRight:10 }}
+                        style={{ fontSize: 15, paddingLeft: 14, fontFamily: 'AirbnbCereal_2', flex: 1, marginRight: 10 }}
                     />
                 </View>
+                {eventAboutError ? <Text style={styles.error}>Please enter event about.</Text> : null}
                 {/* cancel , add botton */}
                 <View style={{ marginTop: 10, flexDirection: 'row', gap: 10, marginBottom: 10 }}>
                     <TouchableOpacity
@@ -561,4 +593,10 @@ const AddEvent = () => {
 
 export default AddEvent
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    error: {
+        color: 'red',
+        marginTop: 2,
+        fontFamily: 'AirbnbCereal_M'
+    },
+})
