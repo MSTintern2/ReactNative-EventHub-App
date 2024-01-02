@@ -47,7 +47,7 @@ const UpcomingCard = () => {
         var month = new Date().getMonth() + 1; //Current Month
         var year = new Date().getFullYear(); //Current Year
         let currentdate = (date + "-" + month + "-" + year)
-        console.log("get current date ----------------" + currentdate)
+        // console.log("get current date ----------------" + currentdate)
         return currentdate;
     }
     // const getCurrentDate = () => {

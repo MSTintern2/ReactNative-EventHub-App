@@ -1,49 +1,51 @@
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Button, Image, StatusBar, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 const Setting = () => {
-    const [date1, setDate1] = useState('');
-    const [date2, setDate2] = useState('');
-    const [result, setResult] = useState('');
-
-    const compareDates = () => {
-        const date1Parts = date1.split('-');
-        const date2Parts = date2.split('-');
-
-        const date1Timestamp = new Date(
-            parseInt(date1Parts[2]), // Year
-            parseInt(date1Parts[1]) - 1, // Month (0-indexed)
-            parseInt(date1Parts[0])
-        ).getTime();
-
-        const date2Timestamp = new Date(
-            parseInt(date2Parts[2]),
-            parseInt(date2Parts[1]) - 1,
-            parseInt(date2Parts[0])
-        ).getTime();
-
-        if (date1Timestamp < date2Timestamp) {
-            setResult('Date 1 is in the past, Date 2 is upcoming.');
-        } else if (date1Timestamp > date2Timestamp) {
-            setResult('Date 1 is upcoming, Date 2 is in the past.');
-        } else {
-            setResult('The dates are the same.');
-        }
-    };
+    const navigation = useNavigation();
     return (
-        <View>
-            <TextInput
-                value={date1}
-                onChangeText={setDate1}
-                placeholder="Enter Date 1 (DD-MM-YYYY)"
+        <View style={{ backgroundColor: '#fff', flex: 1 }}>
+            <StatusBar
+                backgroundColor="#4A43EC"
+                barStyle="light-content"
             />
-            <TextInput
-                value={date2}
-                onChangeText={setDate2}
-                placeholder="Enter Date 2 (DD-MM-YYYY)"
-            />
-            <Button title="Compare" onPress={compareDates} />
-            <Text>{result}</Text>
+            {/* Header */}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', paddingVertical: 12, backgroundColor: '#4A43EC', paddingBottom: 40, }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 24, }}>
+                    <TouchableOpacity
+                        onPress={() => navigation.goBack()}>
+                        <Image
+                            style={{ height: 22, width: 22, marginRight: 13 }}
+                            source={require("../Assets/Icons/EventDetailsLeftArrow.png")}
+                        />
+                    </TouchableOpacity>
+                    <Text style={{ color: '#fff', fontSize: 24, fontWeight: '400', fontFamily: 'AirbnbCereal_M' }}>Settings</Text>
+                </View>
+            </View>
+            {/* Body */}
+            <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 150, marginHorizontal: 24, }}>
+                <Image
+                    style={{ height: 189, width: 176, }}
+                    source={require("../Assets/Others/underdev.png")}
+                />
+                <Text style={{ marginTop: 40, color: '#120D26', fontSize: 24, fontWeight: '500', lineHeight: 34, textAlign: 'center', fontFamily: 'AirbnbCereal_M', }}>
+                    No Settings
+                </Text>
+                <Text style={{ marginTop: 7, color: '#747688', fontSize: 16, fontWeight: '400', lineHeight: 25, textAlign: 'center', opacity: 0.7, fontFamily: 'AirbnbCereal_2', }}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor
+                </Text>
+            </View>
+            <View style={{ position: "absolute", top: 50 }}>
+                <Image
+                    source={require("../Assets/Others/underdev2.png")}
+                />
+            </View>
+            <View style={{ position: "absolute", top: 550 }}>
+                <Image
+                    source={require("../Assets/Others/underdev2.png")}
+                />
+            </View>
         </View>
     )
 }

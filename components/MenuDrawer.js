@@ -20,99 +20,121 @@ const MenuDrawer = () => {
     //activity loader
     const [visible, setVisible] = useState(false);
     //apply filter
-    const [events, setEvents] = useState([]);
-    console.log("filtered events --- " + events)
-    // useEffect(() => {
     const applyFilter = async () => {
-        setVisible(true)
-        console.log(selectedCategories.length)
-        let query = firestore().collection('events');
-        if (selectedCategories.length === 1) {
-            switch (selectedCategories[0]) {
-                case 'Sport':
-                    query = query.where('eventCategory', '==', 'Sport');
-                    break;
-                case 'Music':
-                    query = query.where('eventCategory', '==', 'Music');
-                    break;
-                case 'Art':
-                    query = query.where('eventCategory', '==', 'Art');
-                    break;
-                case 'Food':
-                    query = query.where('eventCategory', '==', 'Food');
-                    break;
-                default:
-                // console.log("in default")
+            try {
+                setVisible(true)
+                // console.log(selectedCategories)
+                let tempAllEventsData = [];
+                currentDate = getCurrentDate()
+                await firestore().collection('events').where("eventCategory", "in", selectedCategories).get()
+                    .then(
+                        res => {
+                            if (res.docs != []) {
+                                res.docs.map(item => {
+                                    tempAllEventsData.push(item.data())
+                                })
+                                setFilteredEvents(tempAllEventsData);
+                            }
+                            setonApplyFilter(true)
+                            setShow(false)
+                            setSelectedCategories([])
+                            setShowSportEvents(false)
+                            setShowMusicEvents(false)
+                            setShowFoodEvents(false)
+                            setShowArtEvents(false)
+                            setShowTodayEvents(false)
+                            setVisible(false)
+                            // console.log(allEvents);
+                            // console.log(JSON.stringify(res.docs[0].data().eventDate));
+                        });
             }
-        } else if (selectedCategories.length === 2) {
-            switch (selectedCategories[0]) {
-                case 'Sport', 'Music':
-                    query = query.where('eventCategory', 'in', ['Sport', 'Music']);
-                    break;
-                case 'Sport', 'Food':
-                    query = query.where('eventCategory', 'in', ['Sport', 'Food']);
-                    break;
-                case 'Sport', 'Art':
-                    query = query.where('eventCategory', 'in', ['Sport', 'Art']);
-                    break;
-                case 'Music', 'Food':
-                    query = query.where('eventCategory', 'in', ['Music', 'Food']);
-                    break;
-                case 'Music', 'Art':
-                    query = query.where('eventCategory', 'in', ['Music', 'Art']);
-                    break;
-                case 'Art', 'Food':
-                    query = query.where('eventCategory', 'in', ['Art', 'Food']);
-                    break;
-                default:
-                // console.log("in default")
+            catch (error) {
+                console.log(error)
             }
-        } else if (selectedCategories.length === 3) {
-            switch (selectedCategories[0]) {
-                case 'Sport', 'Music', 'Art':
-                    query = query.where('eventCategory', 'in', ['Sport', 'Music', 'Art']);
-                    break;
-                case 'Sport', 'Music', 'Food':
-                    query = query.where('eventCategory', 'in', ['Sport', 'Music', 'Food']);
-                    break;
-                case 'Sport', 'Food', 'Art':
-                    query = query.where('eventCategory', 'in', ['Sport', 'Food', 'Art']);
-                    break;
-                case 'Music', 'Art', 'Food':
-                    query = query.where('eventCategory', 'in', ['Music', 'Art', 'Food']);
-                    break;
-                default:
-                // console.log("in default")
-            }
-        } else if (selectedCategories.length === 4) {
-            query = query.where('eventCategory', 'in', ['Sport', 'Food', 'Art', 'Music']);
-        }
-        // let selectedDate = '29-12-2023'
-        // if (selectedDate) {
-        //     query = query.where('eventDate', '==', selectedDate);
-        // }
 
-        // if (selectedPriceRange) {
-        //     const [minPrice, maxPrice] = selectedPriceRange.split('-');
-        //     query = query.where('eventTicketPrice', '>=', minPrice).where('eventTicketPrice', '<=', maxPrice);
+        // setVisible(true)
+        // console.log(selectedCategories)
+        // let query = firestore().collection('events');
+        // if (selectedCategories.length === 1) {
+        //     switch (selectedCategories[0]) {
+        //         case 'Sport':
+        //             query = query.where('eventCategory', '==', 'Sport');
+        //             break;
+        //         case 'Music':
+        //             query = query.where('eventCategory', '==', 'Music');
+        //             break;
+        //         case 'Art':
+        //             query = query.where('eventCategory', '==', 'Art');
+        //             break;
+        //         case 'Food':
+        //             query = query.where('eventCategory', '==', 'Food');
+        //             break;
+        //         default:
+        //         // console.log("in default")
+        //     }
+        // } else if (selectedCategories.length === 2) {
+        //     switch (selectedCategories[0]) {
+        //         case 'Sport', 'Music':
+        //             query = query.where('eventCategory', 'in', ['Sport', 'Music']);
+        //             break;
+        //         case 'Sport', 'Food':
+        //             query = query.where('eventCategory', 'in', ['Sport', 'Food']);
+        //             break;
+        //         case 'Sport', 'Art':
+        //             query = query.where('eventCategory', 'in', ['Sport', 'Art']);
+        //             break;
+        //         case 'Music', 'Food':
+        //             query = query.where('eventCategory', 'in', ['Music', 'Food']);
+        //             break;
+        //         case 'Music', 'Art':
+        //             query = query.where('eventCategory', 'in', ['Music', 'Art']);
+        //             break;
+        //         case 'Art', 'Food':
+        //             query = query.where('eventCategory', 'in', ['Art', 'Food']);
+        //             break;
+        //         default:
+        //         // console.log("in default")
+        //     }
+        // } else if (selectedCategories.length === 3) {
+        //     switch (selectedCategories[0]) {
+        //         case 'Sport', 'Music', 'Art':
+        //             query = query.where('eventCategory', 'in', ['Sport', 'Music', 'Art']);
+        //             break;
+        //         case 'Sport', 'Music', 'Food':
+        //             query = query.where('eventCategory', 'in', ['Sport', 'Music', 'Food']);
+        //             break;
+        //         case 'Sport', 'Food', 'Art':
+        //             query = query.where('eventCategory', 'in', ['Sport', 'Food', 'Art']);
+        //             break;
+        //         case 'Music', 'Art', 'Food':
+        //             query = query.where('eventCategory', 'in', ['Music', 'Art', 'Food']);
+        //             break;
+        //         default:
+        //         // console.log("in default")
+        //     }
+        // } else if (selectedCategories.length === 4) {
+        //     query = query.where('eventCategory', 'in', ['Sport', 'Food', 'Art', 'Music']);
         // }
-
-        const snapshot = await query.get();
-        setEvents(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-        setonApplyFilter(true)
-        setShow(false)
-        setSelectedCategories([])
-        setVisible(false)
+        // // let selectedDate = '29-12-2023'
+        // // if (selectedDate) {
+        // //     query = query.where('eventDate', '==', selectedDate);
+        // // }
+        // // if (selectedPriceRange) {
+        // //     const [minPrice, maxPrice] = selectedPriceRange.split('-');
+        // //     query = query.where('eventTicketPrice', '>=', minPrice).where('eventTicketPrice', '<=', maxPrice);
+        // // }
+        // const snapshot = await query.get();
+        // setEvents(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        // setonApplyFilter(true)
+        // setShow(false)
+        // setSelectedCategories([])
+        // setVisible(false)
     };
 
-    // fetchEvents();
-    // }, [selectedCategories]);
     const [onApplyFilter, setonApplyFilter] = useState(false);
+    // const [onApplyFilter1, setonApplyFilter1] = useState(false);
     const [filteredEvents, setFilteredEvents] = useState("");
-    // const applyFilter = async () => {
-    //     setSelectedCategories([])
-    //     setonApplyFilter(false)
-    // }
+    // const [todayFilteredEvents, setTodayFilteredEvents] = useState("");
     //reset filter
     const resetFilter = () => {
         setShow(false)
@@ -121,26 +143,26 @@ const MenuDrawer = () => {
         setShowMusicEvents(false)
         setShowFoodEvents(false)
         setShowArtEvents(false)
+        setSelectedCategories([])
     }
     //cross filter view 
     const closeFilter = () => {
         setonApplyFilter(false)
         setSelectedCategories([])
-        setEvents([])
     }
     //price filter slider
     const [multiSliderValue, setMultiSliderValue] = useState([0, 300]);
     multiSliderValuesChange = values => setMultiSliderValue(values);
     //category filter 
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [showSportEvents, setShowSportEvents] = useState(false)
-    const [showMusicEvents, setShowMusicEvents] = useState(false)
-    const [showFoodEvents, setShowFoodEvents] = useState(false)
-    const [showArtEvents, setShowArtEvents] = useState(false)
+    const [showSportEvents, setShowSportEvents] = useState(false);
+    const [showMusicEvents, setShowMusicEvents] = useState(false);
+    const [showFoodEvents, setShowFoodEvents] = useState(false);
+    const [showArtEvents, setShowArtEvents] = useState(false);
     const [showTodayEvents, setShowTodayEvents] = useState(false);
     const [showTomorrowEvents, setShowTomorrowEvents] = useState(false);
     const [showWeekEvents, setShowWeekEvents] = useState(false);
-    console.log(selectedCategories)
+    // console.log(selectedCategories)
     const SportBtn = async () => {
         setShowSportEvents(!showSportEvents)
         setSelectedCategories((prevCategories) =>
@@ -169,15 +191,16 @@ const MenuDrawer = () => {
                 ? prevCategories.filter((cat) => cat !== "Art")
                 : [...prevCategories, "Art"])
     }
-    // const TodayBtn = () => {
-    //     setShowTodayEvents(!showTodayEvents)
-    // }
-    // const TomorrowBtn = () => {
-    //     setShowTomorrowEvents(!showTomorrowEvents)
-    // }
-    // const WeekBtn = () => {
-    //     setShowWeekEvents(!showWeekEvents)
-    // }
+    const TodayBtn = () => {
+        setShowTodayEvents(!showTodayEvents)
+        console.log("today btn")
+    }
+    const TomorrowBtn = () => {
+        setShowTomorrowEvents(!showTomorrowEvents)
+    }
+    const WeekBtn = () => {
+        setShowWeekEvents(!showWeekEvents)
+    }
     // console.log(multiSliderValue)
     // get currnet date
     const getCurrentDate = () => {
@@ -189,14 +212,14 @@ const MenuDrawer = () => {
         return currentdate;
     }
     // get currnet date
-    const getTomorrowDate = () => {
-        var date = new Date().getDate(); //Current Date
-        var month = new Date().getMonth() + 1; //Current Month
-        var year = new Date().getFullYear(); //Current Year
-        let currentdate = (date + "-" + month + "-" + year)
-        // console.log("get current date ----------------" + currentdate)
-        return currentdate;
-    }
+    // const getTomorrowDate = () => {
+    //     var date = new Date().getDate() + 1; //Current Date
+    //     var month = new Date().getMonth() + 1; //Current Month
+    //     var year = new Date().getFullYear(); //Current Year
+    //     let tomorrowdate = (date + "-" + month + "-" + year)
+    //     console.log("get tomorrow date ----------------" + tomorrowdate)
+    //     return tomorrowdate;
+    // }
     //get location data
     // const getLocationDate = () => {
     //     Geocoder.init("AIzaSyAMqJdgwZaqsleQ8zw2u78_tP-fhDt-9ko");
@@ -393,7 +416,7 @@ const MenuDrawer = () => {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.menu}
-                        onPress={() => navigation.navigate("Setting")}>
+                            onPress={() => navigation.navigate("Setting")}>
                             <View style={styles.menuInside}>
                                 <Image
                                     source={require("../Assets/Icons/Settings.png")}
@@ -581,7 +604,7 @@ const MenuDrawer = () => {
                     onApplyFilter ?
                         <View>
                             {
-                                events != '' ?
+                                filteredEvents != '' ?
                                     <View>
                                         <View style={{ marginHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                             <Text style={{ color: '#fff', fontSize: 20, fontWeight: '400', marginLeft: 10, fontFamily: 'AirbnbCereal_M' }}>Filtered Data</Text>
@@ -596,7 +619,7 @@ const MenuDrawer = () => {
                                             </View>
                                         </View>
                                         <FlatList
-                                            data={events}
+                                            data={filteredEvents}
                                             horizontal={true}
                                             keyExtractor={item => item.eventId}
                                             showsHorizontalScrollIndicator={false}
