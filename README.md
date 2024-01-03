@@ -122,3 +122,7 @@ These are the npm packages that are userd in this app.
 - [React Native View Shot](https://www.npmjs.com/package/react-native-view-shot) - learn more about React Native View Shot.
 - [React Native Range Slider](https://www.npmjs.com/package/rn-range-slider) - learn more about React Native Range Slider.
 - [Yup](https://www.npmjs.com/package/yup) - learn more about Yup.
+
+# App Screenshots
+
+Check App screenshots in EventHubAppScreenshots folder in repository.
