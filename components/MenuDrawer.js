@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, Animated, FlatList, TouchableHighlight, TextInput, Modal } from 'react-native'
-import React, { useRef, useState, useEffect } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, Animated, FlatList, TouchableHighlight, TextInput, Modal, BackHandler, Alert } from 'react-native'
+import React, { useRef, useState, useEffect, Component } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Home from './Home';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -16,41 +16,56 @@ import CustomMarker from '../database/CustomMarker';
 import LoginLoader from './LoginLoader';
 
 const MenuDrawer = () => {
+    //go back from home , exit app
+
     let currentDate;
+    let tomorrowDate;
+    let weekDate;
     //activity loader
     const [visible, setVisible] = useState(false);
     //apply filter
     const applyFilter = async () => {
-            try {
-                setVisible(true)
-                // console.log(selectedCategories)
-                let tempAllEventsData = [];
-                currentDate = getCurrentDate()
-                await firestore().collection('events').where("eventCategory", "in", selectedCategories).get()
-                    .then(
-                        res => {
-                            if (res.docs != []) {
-                                res.docs.map(item => {
-                                    tempAllEventsData.push(item.data())
-                                })
-                                setFilteredEvents(tempAllEventsData);
-                            }
-                            setonApplyFilter(true)
-                            setShow(false)
-                            setSelectedCategories([])
-                            setShowSportEvents(false)
-                            setShowMusicEvents(false)
-                            setShowFoodEvents(false)
-                            setShowArtEvents(false)
-                            setShowTodayEvents(false)
-                            setVisible(false)
-                            // console.log(allEvents);
-                            // console.log(JSON.stringify(res.docs[0].data().eventDate));
-                        });
-            }
-            catch (error) {
-                console.log(error)
-            }
+        setVisible(true)
+        currentDate = getCurrentDate()
+        console.log("currentDate " + currentDate)
+        // try {
+        //     setVisible(true)
+        //     let tempAllEventsData = [];
+        //     console.log("in if of selectedCategories")
+        //     await firestore().collection('events').where("eventCategory", "in", selectedCategories).get()
+        //         .then(
+        //             res => {
+        //                 if (res.docs != []) {
+        //                     res.docs.map(item => {
+        //                         tempAllEventsData.push(item.data())
+        //                     })
+        //                     setFilteredEvents(tempAllEventsData);
+        //                     console.log(filteredEvents);
+        //                     if (showTodayEvents) {
+        //                         todayFilter()
+        //                     }
+        //                     if (showTomorrowEvents) {
+        //                         tomorrowFilter()
+        //                     }
+        //                     if (showWeekEvents) {
+        //                         weekFilter()
+        //                     }
+        //                 }
+        //                 // console.log(JSON.stringify(res.docs[0].data().eventDate));
+        //             });
+        // }
+        // catch (error) {
+        //     console.log(error)
+        // }
+        if (showTodayEvents) {
+            todayFilter()
+        }
+        if (showTomorrowEvents) {
+            tomorrowFilter()
+        }
+        if (showWeekEvents) {
+            weekFilter()
+        }
 
         // setVisible(true)
         // console.log(selectedCategories)
@@ -129,11 +144,58 @@ const MenuDrawer = () => {
         // setShow(false)
         // setSelectedCategories([])
         // setVisible(false)
+        setonApplyFilter(true)
+        setShow(false)
+        setSelectedCategories([])
+        setShowSportEvents(false)
+        setShowMusicEvents(false)
+        setShowFoodEvents(false)
+        setShowArtEvents(false)
+        setShowTodayEvents(false)
+        setShowTomorrowEvents(false)
+        setShowWeekEvents(false)
+        setVisible(false)
     };
+    const todayFilter = () => {
+        console.log("in if of showTodayEvents")
+        currentDate = getCurrentDate()
+        console.log("currentDate " + currentDate)
+        console.log("before today filter ")
+        const todayFilteredEvents = filteredEvents1.filter((event) => event.eventDate === currentDate);
+        setFilteredEvents1(todayFilteredEvents)
+        console.log("after today filter ")
+        console.log(filteredEvents1)
+    }
+    const tomorrowFilter = () => {
+        console.log("in if of showTomorrowEvents")
+        tomorrowDate = getTomorrowDate()
+        console.log("tomorrowdate " + tomorrowDate)
+        console.log("before tomorrow filter ")
+        const todayFilteredEvents = filteredEvents1.filter((event) => event.eventDate === tomorrowDate);
+        setFilteredEvents1(todayFilteredEvents)
+        console.log("after tomorrow filter ")
+        console.log(filteredEvents1)
+    }
+    const weekFilter = () => {
+        console.log("in if of showWeekEvents")
+        const weekDates = getWeekDates()
+        console.log("week Start " + weekDates.formattedStart)
+        console.log("week end " + weekDates.formattedEnd)
+        console.log("before week filter ")
+        let ff = []
+        const todayFilteredEvents = filteredEvents1.filter((event) => event.eventDate <= weekDates.formattedEnd);
+        ff = todayFilteredEvents
+        console.log("ff" + ff)
+        const todayFilteredEvents1 = ff.filter((event) => event.eventDate >= weekDates.formattedStart);
+        setFilteredEvents1(todayFilteredEvents1)
+        console.log("after week filter ")
+        console.log(filteredEvents1)
+    }
 
     const [onApplyFilter, setonApplyFilter] = useState(false);
     // const [onApplyFilter1, setonApplyFilter1] = useState(false);
     const [filteredEvents, setFilteredEvents] = useState("");
+
     // const [todayFilteredEvents, setTodayFilteredEvents] = useState("");
     //reset filter
     const resetFilter = () => {
@@ -151,7 +213,7 @@ const MenuDrawer = () => {
         setSelectedCategories([])
     }
     //price filter slider
-    const [multiSliderValue, setMultiSliderValue] = useState([0, 300]);
+    const [multiSliderValue, setMultiSliderValue] = useState([0, 999]);
     multiSliderValuesChange = values => setMultiSliderValue(values);
     //category filter 
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -163,63 +225,169 @@ const MenuDrawer = () => {
     const [showTomorrowEvents, setShowTomorrowEvents] = useState(false);
     const [showWeekEvents, setShowWeekEvents] = useState(false);
     // console.log(selectedCategories)
+    const [filteredEvents1, setFilteredEvents1] = useState('');
     const SportBtn = async () => {
         setShowSportEvents(!showSportEvents)
-        setSelectedCategories((prevCategories) =>
-            prevCategories.includes("Sport")
-                ? prevCategories.filter((cat) => cat !== "Sport")
-                : [...prevCategories, "Sport"])
+        setShowMusicEvents(false)
+        setShowFoodEvents(false)
+        setShowArtEvents(false)
+        // setSelectedCategories((prevCategories) =>
+        //     prevCategories.includes("Sport")
+        //         ? prevCategories.filter((cat) => cat !== "Sport")
+        //         : [...prevCategories, "Sport"])
+        let tempAllEventsData = [];
+        await firestore().collection('events').where("eventCategory", "==", "Sport").get()
+            .then(
+                res => {
+                    if (res.docs != []) {
+                        res.docs.map(item => {
+                            tempAllEventsData.push(item.data())
+                        })
+                        setFilteredEvents1(tempAllEventsData);
+                    }
+                })
+        console.log(filteredEvents1)
     }
     const MusicBtn = async () => {
         setShowMusicEvents(!showMusicEvents)
-        setSelectedCategories((prevCategories) =>
-            prevCategories.includes("Music")
-                ? prevCategories.filter((cat) => cat !== "Music")
-                : [...prevCategories, "Music"])
+        setShowSportEvents(false)
+        setShowFoodEvents(false)
+        setShowArtEvents(false)
+        // setSelectedCategories((prevCategories) =>
+        //     prevCategories.includes("Music")
+        //         ? prevCategories.filter((cat) => cat !== "Music")
+        //         : [...prevCategories, "Music"])
+        let tempAllEventsData = [];
+        await firestore().collection('events').where("eventCategory", "==", "Music").get()
+            .then(
+                res => {
+                    if (res.docs != []) {
+                        res.docs.map(item => {
+                            tempAllEventsData.push(item.data())
+                        })
+                        setFilteredEvents1(tempAllEventsData);
+                    }
+                })
+        console.log(filteredEvents1)
     }
-    const FoodBtn = () => {
+    const FoodBtn = async () => {
         setShowFoodEvents(!showFoodEvents)
-        setSelectedCategories((prevCategories) =>
-            prevCategories.includes("Food")
-                ? prevCategories.filter((cat) => cat !== "Food")
-                : [...prevCategories, "Food"])
+        setShowSportEvents(false)
+        setShowMusicEvents(false)
+        setShowArtEvents(false)
+        // setSelectedCategories((prevCategories) =>
+        //     prevCategories.includes("Food")
+        //         ? prevCategories.filter((cat) => cat !== "Food")
+        //         : [...prevCategories, "Food"])
+        let tempAllEventsData = [];
+        await firestore().collection('events').where("eventCategory", "==", "Food").get()
+            .then(
+                res => {
+                    if (res.docs != []) {
+                        res.docs.map(item => {
+                            tempAllEventsData.push(item.data())
+                        })
+                        setFilteredEvents1(tempAllEventsData);
+                    }
+                })
+        console.log(filteredEvents1)
     }
-    const ArtBtn = () => {
+    const ArtBtn = async () => {
         setShowArtEvents(!showArtEvents)
-        setSelectedCategories((prevCategories) =>
-            prevCategories.includes("Art")
-                ? prevCategories.filter((cat) => cat !== "Art")
-                : [...prevCategories, "Art"])
+        setShowSportEvents(false)
+        setShowMusicEvents(false)
+        setShowFoodEvents(false)
+        // setSelectedCategories((prevCategories) =>
+        //     prevCategories.includes("Art")
+        //         ? prevCategories.filter((cat) => cat !== "Art")
+        //         : [...prevCategories, "Art"])
+        let tempAllEventsData = [];
+        await firestore().collection('events').where("eventCategory", "==", "Art").get()
+            .then(
+                res => {
+                    if (res.docs != []) {
+                        res.docs.map(item => {
+                            tempAllEventsData.push(item.data())
+                        })
+                        setFilteredEvents1(tempAllEventsData);
+                    }
+                })
+        console.log(filteredEvents1)
     }
     const TodayBtn = () => {
         setShowTodayEvents(!showTodayEvents)
-        console.log("today btn")
+        setShowTomorrowEvents(false)
+        setShowWeekEvents(false)
+        console.log("today btn pressed")
     }
     const TomorrowBtn = () => {
         setShowTomorrowEvents(!showTomorrowEvents)
+        setShowTodayEvents(false)
+        setShowWeekEvents(false)
+        console.log("Tomorrow Btn pressed")
     }
     const WeekBtn = () => {
         setShowWeekEvents(!showWeekEvents)
+        setShowTodayEvents(false)
+        setShowTomorrowEvents(false)
+        console.log("Week Btn pressed")
     }
     // console.log(multiSliderValue)
     // get currnet date
     const getCurrentDate = () => {
-        var date = new Date().getDate(); //Current Date
-        var month = new Date().getMonth() + 1; //Current Month
-        var year = new Date().getFullYear(); //Current Year
-        let currentdate = (date + "-" + month + "-" + year)
+        // var date = new Date().getDate(); //Current Date
+        // var month = new Date().getMonth() + 1; //Current Month
+        // var year = new Date().getFullYear(); //Current Year
+        // let currentdate = (date + "-" + month + "-" + year)
         // console.log("get current date ----------------" + currentdate)
-        return currentdate;
+        // return currentdate;
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        // console.log(`${day}-${month}-${year}`);
+        return `${day}-${month}-${year}`;
     }
-    // get currnet date
-    // const getTomorrowDate = () => {
-    //     var date = new Date().getDate() + 1; //Current Date
-    //     var month = new Date().getMonth() + 1; //Current Month
-    //     var year = new Date().getFullYear(); //Current Year
-    //     let tomorrowdate = (date + "-" + month + "-" + year)
-    //     console.log("get tomorrow date ----------------" + tomorrowdate)
-    //     return tomorrowdate;
-    // }
+    // get Tomorrow date
+    const getTomorrowDate = () => {
+        // var date = new Date().getDate() + 1; //Current Date
+        // var month = new Date().getMonth() + 1; //Current Month
+        // var year = new Date().getFullYear(); //Current Year
+        // let tomorrowdate = (date + "-" + month + "-" + year)
+        // console.log("get tomorrow date ----------------" + tomorrowdate)
+        // return tomorrowdate;
+        const today = new
+            Date();
+        const tomorrow = new
+            Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const year = tomorrow.getFullYear();
+        const month = (tomorrow.getMonth() + 1).toString().padStart(2, '0');
+        const day = tomorrow.getDate().toString().padStart(2, '0');
+        console.log("get tomorrow date ----------------" + `${day}-${month}-${year}`)
+        return `${day}-${month}-${year}`;
+    }
+    // get week date
+    const getWeekDates = () => {
+        const today = new Date();
+        const offset = (today.getDay() + 6) % 7;
+        // const dayOfWeek = today.getDay();
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - offset);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        const formattedStart = formatDate(weekStart).toUpperCase();
+        const formattedEnd = formatDate(weekEnd).toUpperCase();
+        console.log(formattedStart);
+        console.log(formattedEnd);
+        return { formattedStart, formattedEnd };
+    };
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${day}-${month}-${year}`;
+    };
     //get location data
     // const getLocationDate = () => {
     //     Geocoder.init("AIzaSyAMqJdgwZaqsleQ8zw2u78_tP-fhDt-9ko");
@@ -496,7 +664,7 @@ const MenuDrawer = () => {
                             </View>
                         </TouchableHighlight>
                         <View>
-                            <Text style={{ fontSize: 13, fontStyle: 'normal', fontWeight: 500, color: '#F4F4FE', fontFamily: 'AirbnbCereal_M' }}>New Yourk, USA</Text>
+                            <Text style={{ fontSize: 13, fontStyle: 'normal', fontWeight: 500, color: '#F4F4FE', fontFamily: 'AirbnbCereal_M' }}>Lahore, Pakistan</Text>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
@@ -604,7 +772,7 @@ const MenuDrawer = () => {
                     onApplyFilter ?
                         <View>
                             {
-                                filteredEvents != '' ?
+                                filteredEvents1 != '' ?
                                     <View>
                                         <View style={{ marginHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                             <Text style={{ color: '#fff', fontSize: 20, fontWeight: '400', marginLeft: 10, fontFamily: 'AirbnbCereal_M' }}>Filtered Data</Text>
@@ -619,7 +787,7 @@ const MenuDrawer = () => {
                                             </View>
                                         </View>
                                         <FlatList
-                                            data={filteredEvents}
+                                            data={filteredEvents1}
                                             horizontal={true}
                                             keyExtractor={item => item.eventId}
                                             showsHorizontalScrollIndicator={false}
@@ -665,7 +833,33 @@ const MenuDrawer = () => {
                                             }
                                         />
                                     </View>
-                                    : null
+                                    :
+                                    <View>
+                                        <View style={{ marginHorizontal: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <Text style={{ color: '#fff', fontSize: 20, fontWeight: '400', marginLeft: 10, fontFamily: 'AirbnbCereal_M' }}>Filtered Data</Text>
+                                            <View style={{ marginLeft: 120, backgroundColor: '#5c56ee', borderRadius: 50, padding: 3, marginRight: 4 }}>
+                                                <TouchableOpacity
+                                                    style={{}}
+                                                    onPress={() => closeFilter()}>
+                                                    <Image
+                                                        style={{ height: 25, width: 25 }}
+                                                        source={require("../Assets/Icons/crossss.png")} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                        <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10, marginHorizontal: 24 }}>
+                                            <Image
+                                                style={{ height: 100, width: 100, }}
+                                                source={require("../Assets/Others/NoEvents.png")}
+                                            />
+                                            <Text style={{ marginTop: 10, color: '#fff', fontSize: 24, fontWeight: '500', lineHeight: 34, textAlign: 'center', fontFamily: 'AirbnbCereal_M', }}>
+                                                No Event
+                                            </Text>
+                                            <Text style={{ marginTop: 7, color: '#fff', fontSize: 16, fontWeight: '400', lineHeight: 25, textAlign: 'center', opacity: 0.7, fontFamily: 'AirbnbCereal_2', }}>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor
+                                            </Text>
+                                        </View>
+                                    </View>
                             }
                         </View>
                         : null
@@ -736,7 +930,10 @@ const MenuDrawer = () => {
                     </View>
                     {/* Time & Date Filter */}
                     <View style={{ marginTop: 25, marginHorizontal: 20, }}>
-                        <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Time & Date</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Time & Date </Text>
+                            {/* <Text style={{ color: '#807A7A', fontSize: 14, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_2' }}>(Not Functional)</Text> */}
+                        </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
                             <TouchableOpacity
                                 style={[{ borderRadius: 10, borderColor: '#E6E6E6', borderWidth: 1, }, { backgroundColor: showTodayEvents ? '#5669FF' : '#fff' }]}
@@ -780,10 +977,14 @@ const MenuDrawer = () => {
                     </View>
                     {/* Location Filter */}
                     <View style={{ marginTop: 25, marginHorizontal: 20, }}>
-                        <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Location</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Location </Text>
+                            <Text style={{ color: '#807A7A', fontSize: 14, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_2' }}>(Not Functional)</Text>
+                        </View>
                         <TouchableOpacity
                             style={{ borderRadius: 10, borderColor: '#E6E6E6', borderWidth: 1, marginTop: 10, paddingVertical: 9, paddingHorizontal: 19, }}
-                            onPress={() => { }}>
+                            onPress={() => { }}
+                        >
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <View style={{ backgroundColor: '#e6e9ff', width: 45, height: 45, justifyContent: 'center', alignItems: 'center', borderRadius: 11, marginRight: 18 }}>
@@ -795,7 +996,7 @@ const MenuDrawer = () => {
                                         </View>
                                     </View>
                                     <Text style={{ color: '#141736', fontSize: 16, fontWeight: '400', lineHeight: 25, fontFamily: 'AirbnbCereal_M' }}>
-                                        New Yourk, USA
+                                        Lahore, Pakistan
                                     </Text>
                                 </View>
                                 <Image
@@ -807,7 +1008,10 @@ const MenuDrawer = () => {
                     {/* Price Range Filter */}
                     <View style={{ marginTop: 24, marginHorizontal: 20, }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Select price range</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Select price range </Text>
+                                <Text style={{ color: '#807A7A', fontSize: 14, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_2' }}>(Not Functional)</Text>
+                            </View>
                             <Text style={{ color: '#3F38DD', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>
                                 ${multiSliderValue[0]} - ${multiSliderValue[1]}
                             </Text>

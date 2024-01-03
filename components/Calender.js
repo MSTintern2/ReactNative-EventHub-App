@@ -74,7 +74,7 @@ const Calender = () => {
     // let fd= JSON.stringify(formattedDates);
     // console.log(fd)
     const edates = formattedDates.map((date) => ({
-        [date]: { selected: true, selectedColor: 'red',marked: true, },
+        [date]: { selected: true, selectedColor: 'red', marked: true, },
     }));
     console.log(edates)
     // const event = ['2023-12-16']
@@ -132,6 +132,20 @@ const Calender = () => {
                     <Text style={{ marginLeft: 5, fontSize: 14, color: '#000', fontFamily: 'AirbnbCereal_2' }}>Event Date</Text>
                 </View> */}
             </View>
+            {/* events */}
+            <View style={{ backgroundColor: "red", marginHorizontal: 85, marginTop: 10, }}>
+                <Text style={{ marginLeft: 5, fontSize: 14, color: '#000', fontFamily: 'AirbnbCereal_M', textAlign: 'center' }}>
+                    These date have events:
+                </Text>
+                <FlatList
+                    data={eventDates}
+                    renderItem={({ item }) =>
+                        <View style={{}}>
+                            <Text style={{ marginLeft: 5, fontSize: 12, color: '#000', fontFamily: 'AirbnbCereal_2', textAlign: 'center' }}>{item}</Text>
+                        </View>
+                    }
+                />
+            </View>
             {/* events list */}
             <View style={{ marginTop: 10, }}>
                 {
@@ -161,7 +175,7 @@ const Calender = () => {
                             }
                         />
                         :
-                        <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 60, marginHorizontal: 24 }}>
+                        <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 10, marginHorizontal: 24 }}>
                             <Image
                                 style={{ height: 100, width: 100, }}
                                 source={require("../Assets/Others/NoEvents.png")}

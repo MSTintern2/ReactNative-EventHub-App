@@ -106,7 +106,7 @@ const EventCards = (props) => {
             let tempAllEventsData = [];
             currentDate = getCurrentDate()
             // firestore().collection('events').get()
-            firestore().collection('events').where("eventDate", "<", currentDate).get()
+            firestore().collection('events').where("eventDate", ">=", currentDate).get()
                 .then(
                     res => {
                         if (res.docs != []) {
@@ -124,13 +124,21 @@ const EventCards = (props) => {
         }
     }
     // get currnet date
+    // const getCurrentDate = () => {
+    //     var date = new Date().getDate(); //Current Date
+    //     var month = new Date().getMonth() + 1; //Current Month
+    //     var year = new Date().getFullYear(); //Current Year
+    //     let currentdate = (date + "-" + month + "-" + year)
+    //     // console.log("get current date ----------------" + currentdate)
+    //     return currentdate;
+    // }
     const getCurrentDate = () => {
-        var date = new Date().getDate(); //Current Date
-        var month = new Date().getMonth() + 1; //Current Month
-        var year = new Date().getFullYear(); //Current Year
-        let currentdate = (date + "-" + month + "-" + year)
-        // console.log("get current date ----------------" + currentdate)
-        return currentdate;
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        // console.log(`${day}-${month}-${year}`);
+        return `${day}-${month}-${year}`;
     }
 
     return (

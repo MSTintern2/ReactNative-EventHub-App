@@ -479,7 +479,7 @@ const AddEvent = () => {
                         source={require("../Assets/Icons/eprice.png")}
                     />
                     <TextInput placeholder='Enter event ticket price' placeholderTextColor="#747688"
-                        keyboardType='number-pad'
+                        keyboardType='number-pad' maxLength={3}
                         value={eventTicketPrice}
                         onChangeText={(text) => setEventTicketPrice(text)}
                         style={{ fontSize: 15, paddingLeft: 14, fontFamily: 'AirbnbCereal_2', flex: 1 }}

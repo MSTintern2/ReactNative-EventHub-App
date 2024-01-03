@@ -102,7 +102,10 @@ const Filter = ({show}) => {
             </View>
             {/* Time & Date Filter */}
             <View style={{ marginTop: 25, marginHorizontal: 20, }}>
-                <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Time & Date</Text>
+            <View style={{flexDirection:'row'}}>
+                <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Time & D ate</Text>
+                <Text style={{ color: '#120D26', fontSize: 18, fontWeight: '400', lineHeight: 34, fontFamily: 'AirbnbCereal_M' }}>Not Functional</Text>
+            </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
                     <TouchableOpacity
                         style={{ borderRadius: 10, borderColor: '#E6E6E6', borderWidth: 1, backgroundColor: 'red', }}
