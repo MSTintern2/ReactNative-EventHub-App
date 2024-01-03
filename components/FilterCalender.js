@@ -5,17 +5,17 @@ import Calendar from 'react-native-calendars/src/calendar';
 import firestore from '@react-native-firebase/firestore';
 // import moment from 'moment';
 
-const Calender = () => {
+const FilterCalender = () => {
     const navigation = useNavigation();
     //pick date to see events
     const [selected, setSelected] = useState("");
-    console.log('selectedDate-------------------', selected);
+    // console.log('selectedDate-------------------', selected);
     const calendarDate = selected;
     const year = calendarDate.slice(0, 4);
     const month = calendarDate.slice(5, 7);
     const day = calendarDate.slice(8);
     const formattedDate = `${day}-${month}-${year}`;
-    console.log('formattedDate-------------------', formattedDate);
+    // console.log('formattedDate-------------------', formattedDate);
     //get events from firebase
     const [allEvents, setAllEvents] = useState("")
     useEffect(() => {
@@ -47,7 +47,7 @@ const Calender = () => {
     }
 
     const [eventDates, setEventDates] = useState([]);
-    console.log(eventDates)
+    // console.log(eventDates)
     useEffect(() => {
         const db = firestore();
         const eventsRef = db.collection('events');
@@ -70,13 +70,13 @@ const Calender = () => {
         return formattedDates;
     }
     const formattedDates = convertDates(eventDates);
-    console.log(formattedDates)
+    // console.log(formattedDates)
     // let fd= JSON.stringify(formattedDates);
     // console.log(fd)
     const edates = formattedDates.map((date) => ({
         [date]: { selected: true, selectedColor: 'red', marked: true, },
     }));
-    console.log(edates)
+    // console.log(edates)
     // const event = ['2023-12-16']
     return (
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
@@ -193,7 +193,7 @@ const Calender = () => {
     )
 }
 
-export default Calender
+export default FilterCalender
 
 const styles = StyleSheet.create({
     nearbyEventCard: {

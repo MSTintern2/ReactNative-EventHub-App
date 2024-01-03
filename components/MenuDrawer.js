@@ -27,7 +27,7 @@ const MenuDrawer = () => {
     const applyFilter = async () => {
         setVisible(true)
         currentDate = getCurrentDate()
-        console.log("currentDate " + currentDate)
+        // console.log("currentDate " + currentDate)
         // try {
         //     setVisible(true)
         //     let tempAllEventsData = [];
@@ -157,39 +157,39 @@ const MenuDrawer = () => {
         setVisible(false)
     };
     const todayFilter = () => {
-        console.log("in if of showTodayEvents")
+        // console.log("in if of showTodayEvents")
         currentDate = getCurrentDate()
-        console.log("currentDate " + currentDate)
-        console.log("before today filter ")
+        // console.log("currentDate " + currentDate)
+        // console.log("before today filter ")
         const todayFilteredEvents = filteredEvents1.filter((event) => event.eventDate === currentDate);
         setFilteredEvents1(todayFilteredEvents)
-        console.log("after today filter ")
-        console.log(filteredEvents1)
+        // console.log("after today filter ")
+        // console.log(filteredEvents1)
     }
     const tomorrowFilter = () => {
-        console.log("in if of showTomorrowEvents")
+        // console.log("in if of showTomorrowEvents")
         tomorrowDate = getTomorrowDate()
-        console.log("tomorrowdate " + tomorrowDate)
-        console.log("before tomorrow filter ")
+        // console.log("tomorrowdate " + tomorrowDate)
+        // console.log("before tomorrow filter ")
         const todayFilteredEvents = filteredEvents1.filter((event) => event.eventDate === tomorrowDate);
         setFilteredEvents1(todayFilteredEvents)
-        console.log("after tomorrow filter ")
-        console.log(filteredEvents1)
+        // console.log("after tomorrow filter ")
+        // console.log(filteredEvents1)
     }
     const weekFilter = () => {
-        console.log("in if of showWeekEvents")
+        // console.log("in if of showWeekEvents")
         const weekDates = getWeekDates()
-        console.log("week Start " + weekDates.formattedStart)
-        console.log("week end " + weekDates.formattedEnd)
-        console.log("before week filter ")
+        // console.log("week Start " + weekDates.formattedStart)
+        // console.log("week end " + weekDates.formattedEnd)
+        // console.log("before week filter ")
         let ff = []
         const todayFilteredEvents = filteredEvents1.filter((event) => event.eventDate <= weekDates.formattedEnd);
         ff = todayFilteredEvents
-        console.log("ff" + ff)
+        // console.log("ff" + ff)
         const todayFilteredEvents1 = ff.filter((event) => event.eventDate >= weekDates.formattedStart);
         setFilteredEvents1(todayFilteredEvents1)
-        console.log("after week filter ")
-        console.log(filteredEvents1)
+        // console.log("after week filter ")
+        // console.log(filteredEvents1)
     }
 
     const [onApplyFilter, setonApplyFilter] = useState(false);
@@ -959,7 +959,7 @@ const MenuDrawer = () => {
                         </View>
                         <TouchableOpacity
                             style={{ borderRadius: 10, borderColor: '#E6E6E6', borderWidth: 1, marginTop: 14, width: 260, paddingVertical: 9, paddingLeft: 19, }}
-                            onPress={() => { }}>
+                            onPress={() => {setShow(false),navigation.navigate("FilterCalender")}}>
                             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                                 <Image
                                     style={{ marginRight: 13 }}

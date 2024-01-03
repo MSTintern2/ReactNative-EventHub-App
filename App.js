@@ -38,6 +38,7 @@ import AddEvent from './components/AddEvent';
 import SportHome from './components/SportHome';
 import BuyTicket from './components/BuyTicket';
 import Setting from './components/Setting';
+import FilterCalender from './components/FilterCalender';
 // import OnboardingScreen from './components/OnboardingScreen';
 
 const Stack = createStackNavigator();
@@ -93,6 +94,7 @@ const App = () => {
         <Stack.Screen name="AddEvent" component={AddEvent} options={{ headerShown: false }} />
         <Stack.Screen name="BuyTicket" component={BuyTicket} options={{ headerShown: false }} />
         <Stack.Screen name="Setting" component={Setting} options={{ headerShown: false }} />
+        <Stack.Screen name="FilterCalender" component={FilterCalender} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   )
