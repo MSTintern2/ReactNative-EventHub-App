@@ -68,7 +68,7 @@ You've successfully run and modified your React Native App. :partying_face:
 
 If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
-# Learn More
+# Learn More 
 
 To learn more about React Native, take a look at the following resources:
 
@@ -78,7 +78,7 @@ To learn more about React Native, take a look at the following resources:
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
 
-# NPM Packages used in this App
+# NPM Packages used in this App 📄
 
 These are the npm packages that are userd in this app.
 
@@ -123,6 +123,6 @@ These are the npm packages that are userd in this app.
 - [React Native Range Slider](https://www.npmjs.com/package/rn-range-slider) - learn more about React Native Range Slider.
 - [Yup](https://www.npmjs.com/package/yup) - learn more about Yup.
 
-# App Screenshots :📱:
+# App Screenshots 📱
 
 Check App screenshots in `EventHubAppScreenshots` folder in repository.
